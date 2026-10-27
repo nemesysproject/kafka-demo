@@ -1,0 +1,26 @@
+# Rust & Cargo
+src/core-api/target/
+src/core-api/**/Cargo.lock
+
+# Node & Angular
+src/dashboard/node_modules/
+src/dashboard/.angular/
+src/dashboard/dist/
+src/dashboard/.cache/
+
+# Docker & Kafka runtime data
+.docker-data/
+*.log
+
+# Environment variables & secrets
+.env
+.env.local
+.env.*.local
+
+# IDE & OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

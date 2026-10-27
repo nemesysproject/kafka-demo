@@ -1,0 +1,69 @@
+<div class="monitoring-dashboard">
+  <!-- Connection banner if disconnected -->
+  @if (connectionStatus() !== 'CONNECTED') {
+    <div class="connection-banner">
+      <div class="banner-info">
+        <span class="warning-icon">⚠️</span>
+        <span>
+          WebSocket Estado: <strong>{{ connectionStatus() }}</strong> - Esperando eventos de <code>localhost:3000/ws</code>
+        </span>
+      </div>
+      <button class="retry-btn" (click)="reconnect()">Reconectar</button>
+    </div>
+  }
+
+  <!-- Metrics Cards Row -->
+  <app-metrics-cards></app-metrics-cards>
+
+  <!-- Main Grid: Alert Feed (Left) & Live Transactions Stream (Right) -->
+  <div class="dashboard-grid">
+    <div class="feed-column">
+      <app-alert-feed></app-alert-feed>
+    </div>
+
+    <div class="stream-column glass-panel">
+      <div class="stream-header">
+        <div class="stream-title">
+          <span class="stream-dot"></span>
+          <h3>Transacciones en Vivo (Kafka Ingestion)</h3>
+        </div>
+        <span class="stream-badge">{{ recentTransactions().length }} En Memoria</span>
+      </div>
+
+      <div class="table-container">
+        <table class="tx-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Usuario</th>
+              <th>Monto</th>
+              <th>Comercio</th>
+              <th>País</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (recentTransactions().length === 0) {
+              <tr>
+                <td colspan="6" class="empty-table">
+                  Esperando transacciones entrantes desde el topic 'transactions'...
+                </td>
+              </tr>
+            } @else {
+              @for (tx of recentTransactions(); track tx.id) {
+                <tr class="tx-row">
+                  <td><code class="tx-id">{{ tx.id }}</code></td>
+                  <td>{{ tx.user_id }}</td>
+                  <td class="tx-amount">{{ tx.amount | currency:tx.currency }}</td>
+                  <td>{{ tx.merchant }}</td>
+                  <td><span class="country-pill">{{ tx.location_country }}</span></td>
+                  <td class="tx-time">{{ tx.timestamp * 1000 | date:'HH:mm:ss' }}</td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

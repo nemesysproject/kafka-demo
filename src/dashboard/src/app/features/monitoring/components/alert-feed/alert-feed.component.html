@@ -1,0 +1,52 @@
+<div class="feed-container glass-panel">
+  <div class="feed-header">
+    <div class="header-title">
+      <span class="live-dot"></span>
+      <h3>Feed de Alertas de Fraude</h3>
+    </div>
+    <span class="alert-counter">{{ alerts().length }} Eventos Registrados</span>
+  </div>
+
+  <div class="feed-content">
+    @if (alerts().length === 0) {
+      <div class="empty-state">
+        <div class="radar-scan"></div>
+        <p>Monitoreando transacciones en Kafka... No se han detectado fraudes recientes.</p>
+      </div>
+    } @else {
+      <div class="alert-list">
+        @for (alert of alerts(); track alert.alert_id) {
+          <div class="alert-card" [ngClass]="'border-' + alert.severity.toLowerCase()">
+            <div class="alert-meta">
+              <span class="severity-badge" [ngClass]="getSeverityBadgeClass(alert.severity)">
+                {{ alert.severity }} (Score: {{ alert.score }})
+              </span>
+              <span class="timestamp">{{ formatTime(alert.timestamp) }}</span>
+            </div>
+
+            <div class="alert-body">
+              <p class="alert-reason">{{ alert.reason }}</p>
+
+              @if (alert.ai_analysis) {
+                <div class="ai-insight-box">
+                  <div class="ai-insight-header">
+                    <span class="ai-chip">🤖 Qwen 2.5 1.5B (Ollama)</span>
+                    <span class="ai-label">Razonamiento Cognitivo</span>
+                  </div>
+                  <p class="ai-insight-text">{{ alert.ai_analysis }}</p>
+                </div>
+              }
+
+              <div class="alert-details">
+                <span class="detail-item"><strong>TX ID:</strong> <code>{{ alert.transaction_id }}</code></span>
+                <span class="detail-item"><strong>Usuario:</strong> <code>{{ alert.user_id }}</code></span>
+                <span class="detail-item amount"><strong>Monto Retenido:</strong> {{ alert.amount | currency:alert.currency }}</span>
+              </div>
+            </div>
+
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

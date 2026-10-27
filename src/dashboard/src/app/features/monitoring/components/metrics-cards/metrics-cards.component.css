@@ -1,0 +1,74 @@
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.card-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.card-icon {
+  font-size: 1.25rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.cyan-icon { background: rgba(6, 182, 212, 0.15); }
+.red-icon { background: rgba(239, 68, 68, 0.15); }
+.purple-icon { background: rgba(139, 92, 246, 0.15); }
+.yellow-icon { background: rgba(234, 179, 8, 0.15); }
+
+.card-value {
+  font-size: 2.1rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.card-value .unit {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+
+.cyan-text { color: var(--accent-cyan); }
+.red-text { color: #f87171; }
+.purple-text { color: #c084fc; }
+.yellow-text { color: #facc15; }
+
+.card-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.5rem;
+}
+
+.subtext {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}

@@ -1,0 +1,58 @@
+<div class="metrics-grid">
+  <!-- Card 1: TPS -->
+  <div class="metric-card glass-panel">
+    <div class="card-header">
+      <span class="card-label">Rendimiento (TPS)</span>
+      <div class="card-icon cyan-icon">⚡</div>
+    </div>
+    <div class="card-value cyan-text">
+      {{ metrics().current_tps | number:'1.1-1' }}
+      <span class="unit">ops/s</span>
+    </div>
+    <div class="card-footer">
+      <span class="subtext">Evaluación de reglas &lt; 2ms</span>
+    </div>
+  </div>
+
+  <!-- Card 2: Montos Retenidos -->
+  <div class="metric-card glass-panel">
+    <div class="card-header">
+      <span class="card-label">Monto Retenido</span>
+      <div class="card-icon red-icon">🛡️</div>
+    </div>
+    <div class="card-value red-text">
+      {{ metrics().total_retained_amount | currency:'USD':'symbol':'1.0-0' }}
+    </div>
+    <div class="card-footer">
+      <span class="subtext">Fraudes interceptados y bloqueados</span>
+    </div>
+  </div>
+
+  <!-- Card 3: Total Transacciones -->
+  <div class="metric-card glass-panel">
+    <div class="card-header">
+      <span class="card-label">Transacciones Procesadas</span>
+      <div class="card-icon purple-icon">📊</div>
+    </div>
+    <div class="card-value purple-text">
+      {{ metrics().total_processed | number }}
+    </div>
+    <div class="card-footer">
+      <span class="subtext">Broker Kafka KRaft</span>
+    </div>
+  </div>
+
+  <!-- Card 4: Tasa de Fraude -->
+  <div class="metric-card glass-panel">
+    <div class="card-header">
+      <span class="card-label">Tasa de Fraude</span>
+      <div class="card-icon yellow-icon">⚠️</div>
+    </div>
+    <div class="card-value yellow-text">
+      {{ fraudRate() }}%
+    </div>
+    <div class="card-footer">
+      <span class="subtext">{{ metrics().total_frauds_detected }} fraudes detectados</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mxfile host="app.diagrams.net" modified="2026-10-26T21:00:00.000Z" agent="Antigravity" version="24.0.0" type="device">
+  <diagram id="diag_arch_comb" name="Arquitectura del Sistema">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1360" pageHeight="860" background="#F8FAFC" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="hdr_banner" parent="1" value="&lt;b&gt;SISTEMA DE DETECCIÓN DE FRAUDE EN TIEMPO REAL&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:12px;font-weight:normal;color:#94A3B8;'&gt;Arquitectura de Componentes, Flujos de Eventos e Infraestructura Contenerizada&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#0F172A;strokeColor=#1E293B;fontColor=#F8FAFC;fontSize=16;align=center;verticalAlign=middle;shadow=1;" vertex="1">
+          <mxGeometry x="40" y="20" width="1280" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_ext_layer" parent="1" value="&lt;b&gt;🌍 CAPA EXTERNA / CLIENTES &amp; ACTORES&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;fillColor=#F8FAFC;strokeColor=#64748B;strokeWidth=2;fontColor=#1E293B;fontSize=12;fontStyle=1;startSize=30;arcSize=6;" vertex="1">
+          <mxGeometry x="40" y="100" width="230" height="720" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_ecommerce" parent="1" value="&lt;b&gt;🛍️ E-Commerce Checkout&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:11px;color:#475569;'&gt;Pasarela de Pagos / API de Transacciones&lt;br/&gt;(id, user, amount, card, ip, country)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=2;fontColor=#0F172A;fontSize=11;align=center;shadow=1;" vertex="1">
+          <mxGeometry x="55" y="150" width="200" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_simulator" parent="1" value="&lt;b&gt;⚡ Generador de Carga / CLI&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:11px;color:#475569;'&gt;Simulador de Transacciones&lt;br/&gt;kafka-console-producer / Scripts&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=1.5;fontColor=#0F172A;fontSize=11;align=center;shadow=1;" vertex="1">
+          <mxGeometry x="55" y="260" width="200" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_analyst" parent="1" value="&lt;b&gt;👤 Analista de Fraude / Ops&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:11px;color:#475569;'&gt;Monitoreo de Alertas en Vivo&lt;br/&gt;Explicabilidad IA (XAI)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontColor=#0F172A;fontSize=11;align=center;shadow=1;" vertex="1">
+          <mxGeometry x="55" y="520" width="200" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_devops" parent="1" value="&lt;b&gt;👨‍💻 Desarrollador / Auditor&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:11px;color:#475569;'&gt;Swagger UI (:3000)&lt;br/&gt;Kafka UI (:8085)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#FFFFFF;strokeColor=#475569;strokeWidth=1.5;fontColor=#0F172A;fontSize=11;align=center;shadow=1;" vertex="1">
+          <mxGeometry x="55" y="660" width="200" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_docker_env" parent="1" value="&lt;b&gt;🐳 ENTORNO DOCKER COMPOSE &amp;nbsp;|&amp;nbsp; Red Bridge: &lt;code&gt;fraud-network&lt;/code&gt;&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;fillColor=#F8FAFC;strokeColor=#0284C7;strokeWidth=2;fontColor=#0369A1;fontSize=13;fontStyle=1;startSize=32;arcSize=6;shadow=1;" vertex="1">
+          <mxGeometry x="290" y="100" width="1030" height="720" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_kafka" parent="1" value="&lt;b&gt;📦 Broker Apache Kafka (KRaft Mode)&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;font-weight:normal;color:#7C2D12;'&gt;Contenedor: &lt;code&gt;fraud-kafka-kraft&lt;/code&gt; (apache/kafka:3.8.0)&lt;br/&gt;Sin ZooKeeper | Node ID: 1 | Puertos: 9092 (interno) / 9094 (host)&lt;/font&gt;" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;fillColor=#FFF7ED;strokeColor=#EA580C;strokeWidth=2;fontColor=#9A3412;fontSize=11;fontStyle=1;startSize=40;arcSize=6;" vertex="1">
+          <mxGeometry x="310" y="145" width="370" height="265" as="geometry"/>
+        </mxCell>
+        <mxCell id="kafka_topic_tx" parent="1" value="&lt;b&gt;📨 Topic: &lt;code&gt;transactions&lt;/code&gt;&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#9A3412;'&gt;Stream de Eventos Financieros Crudos (JSON)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#FFEDD5;strokeColor=#EA580C;strokeWidth=1.5;fontColor=#7C2D12;fontSize=11;align=center;" vertex="1">
+          <mxGeometry x="330" y="200" width="330" height="48" as="geometry"/>
+        </mxCell>
+        <mxCell id="kafka_topic_alerts" parent="1" value="&lt;b&gt;🚨 Topic: &lt;code&gt;fraud-alerts&lt;/code&gt;&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#9A3412;'&gt;Alertas de Fraude Evaluadas &amp; Enriquecidas con IA&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#FEE2E2;strokeColor=#DC2626;strokeWidth=1.5;fontColor=#991B1B;fontSize=11;align=center;" vertex="1">
+          <mxGeometry x="330" y="260" width="330" height="48" as="geometry"/>
+        </mxCell>
+        <mxCell id="kafka_vol" parent="1" value="💾 &lt;b&gt;Volumen Docker:&lt;/b&gt; &lt;code&gt;kafka_data&lt;/code&gt; (/var/lib/kafka/data)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#FED7AA;strokeColor=#C2410C;strokeWidth=1;fontColor=#7C2D12;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="330" y="320" width="330" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="kafka_features" parent="1" value="⚡ &lt;i&gt;Auto-creación de tópicos | Group ID: fraud-detection-core | Min ISR: 1&lt;/i&gt;" style="text;html=1;align=center;verticalAlign=middle;fontSize=9;fontColor=#9A3412;" vertex="1">
+          <mxGeometry x="330" y="355" width="330" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_kafka_ui" parent="1" value="&lt;b&gt;🖥️ Kafka UI Dashboard&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;font-weight:normal;color:#3730A3;'&gt;Contenedor: &lt;code&gt;fraud-kafka-ui&lt;/code&gt;&lt;br/&gt;provectuslabs/kafka-ui:latest&lt;br/&gt;&lt;b&gt;Puerto: 8085:8080&lt;/b&gt;&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#4338CA;'&gt;• Telemetría de Brokers&lt;br/&gt;• Explorador de Mensajes&lt;br/&gt;• Métricas de Consumidores&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#EEF2FF;strokeColor=#6366F1;strokeWidth=1.5;fontColor=#312E81;fontSize=11;align=center;shadow=1;" vertex="1">
+          <mxGeometry x="710" y="145" width="230" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_ollama" parent="1" value="&lt;b&gt;🧠 Motor Cognitivo de IA (Ollama Local)&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;font-weight:normal;color:#581C87;'&gt;Contenedor: &lt;code&gt;fraud-ollama&lt;/code&gt; (ollama/ollama:latest)&lt;br/&gt;Puerto: 11434:11434 | &lt;b&gt;Ejecución en CPU (Sin GPU)&lt;/b&gt;&lt;/font&gt;" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;fillColor=#FAF5FF;strokeColor=#9333EA;strokeWidth=2;fontColor=#6B21A8;fontSize=11;fontStyle=1;startSize=40;arcSize=6;" vertex="1">
+          <mxGeometry x="960" y="145" width="340" height="265" as="geometry"/>
+        </mxCell>
+        <mxCell id="ollama_model" parent="1" value="&lt;b&gt;🔬 Small Language Model (SLM)&lt;/b&gt;&lt;br/&gt;&lt;b&gt;&lt;code&gt;qwen2.5:1.5b&lt;/code&gt;&lt;/b&gt; (~1.0 GB RAM)&lt;br/&gt;&lt;font style='font-size:10px;color:#581C87;'&gt;• Análisis de 'Zona Gris' (Monto &gt;= $1500)&lt;br/&gt;• Explicabilidad XAI en Lenguaje Natural&lt;br/&gt;• Inferencia Estructurada JSON (risk, confidence)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#F3E8FF;strokeColor=#A855F7;strokeWidth=1.5;fontColor=#4C1D95;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="975" y="200" width="310" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ollama_vol" parent="1" value="💾 &lt;b&gt;Volumen Docker:&lt;/b&gt; &lt;code&gt;ollama_data&lt;/code&gt; (/root/.ollama)&lt;br/&gt;&lt;font style='font-size:9px;color:#6B21A8;'&gt;Persistencia local del modelo descargado&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#E9D5FF;strokeColor=#9333EA;strokeWidth=1;fontColor=#581C87;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="975" y="285" width="310" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="ollama_keepalive" parent="1" value="⚡ &lt;i&gt;OLLAMA_KEEP_ALIVE=24h (Modelo caliente en memoria)&lt;/i&gt;" style="text;html=1;align=center;verticalAlign=middle;fontSize=9;fontColor=#6B21A8;" vertex="1">
+          <mxGeometry x="975" y="325" width="310" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_core_api" parent="1" value="&lt;b&gt;⚙️ Core API - Motor de Detección de Fraude (Rust + Axum + Tokio)&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;font-weight:normal;color:#065F46;'&gt;Contenedor: &lt;code&gt;fraud-core-api&lt;/code&gt; | Puerto: 3000:3000 | Concurrencia Asíncrona de Alto Rendimiento&lt;/font&gt;" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontColor=#064E3B;fontSize=11;fontStyle=1;startSize=40;arcSize=6;shadow=1;" vertex="1">
+          <mxGeometry x="310" y="430" width="630" height="370" as="geometry"/>
+        </mxCell>
+        <mxCell id="rust_consumer" parent="1" value="&lt;b&gt;📥 Kafka Consumer&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#064E3B;'&gt;StreamConsumer (rdkafka)&lt;br/&gt;Suscrito a: &lt;code&gt;transactions&lt;/code&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#D1FAE5;strokeColor=#10B981;strokeWidth=1.5;fontColor=#064E3B;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="330" y="490" width="170" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="rust_engine" parent="1" value="&lt;b&gt;⚡ Tier 1: Motor Heurístico (&amp;lt; 2ms)&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#713F12;'&gt;&lt;b&gt;Evaluación de Reglas en Memoria:&lt;/b&gt;&lt;br/&gt;• Monto Excesivo (&amp;gt;= $5,000)&lt;br/&gt;• Velocidad Anormal (&amp;gt;3 tx en 30s)&lt;br/&gt;• Países Alto Riesgo (NK, SY, IR, RU)&lt;br/&gt;• Card Testing (Micro &amp;lt;= $1.00)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#FEF08A;strokeColor=#CA8A04;strokeWidth=2;fontColor=#713F12;fontSize=10;align=center;shadow=1;" vertex="1">
+          <mxGeometry x="330" y="570" width="280" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="rust_producer" parent="1" value="&lt;b&gt;📤 Kafka Producer&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#064E3B;'&gt;FutureProducer (rdkafka)&lt;br/&gt;Emite a: &lt;code&gt;fraud-alerts&lt;/code&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#D1FAE5;strokeColor=#10B981;strokeWidth=1.5;fontColor=#064E3B;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="330" y="685" width="170" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="rust_ollama_client" parent="1" value="&lt;b&gt;🤖 Ollama HTTP Client&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#4C1D95;'&gt;Reqwest Async + Tokio Spawn&lt;br/&gt;• Auditoría 'Zona Gris' (&amp;gt;=$1500)&lt;br/&gt;• Generación de XAI Explicativa&lt;br/&gt;• Recalibra Score de Riesgo&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#EDE9FE;strokeColor=#8B5CF6;strokeWidth=1.5;fontColor=#4C1D95;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="640" y="490" width="270" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="rust_web_server" parent="1" value="&lt;b&gt;🌐 Servidor Web Axum &amp; Endpoints&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#1E3A8A;'&gt;• &lt;b&gt;WebSocket:&lt;/b&gt; &lt;code&gt;ws://localhost:3000/ws&lt;/code&gt;&lt;br/&gt;• &lt;b&gt;Health:&lt;/b&gt; &lt;code&gt;/health&lt;/code&gt; | &lt;code&gt;/api/ai/status&lt;/code&gt;&lt;br/&gt;• &lt;b&gt;Inferencia:&lt;/b&gt; &lt;code&gt;POST /api/ai/analyze&lt;/code&gt;&lt;br/&gt;• &lt;b&gt;Docs:&lt;/b&gt; &lt;code&gt;/swagger-ui/&lt;/code&gt; (OpenAPI)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#DBEAFE;strokeColor=#3B82F6;strokeWidth=1.5;fontColor=#1E3A8A;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="640" y="600" width="270" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="rust_metrics_state" parent="1" value="📊 &lt;b&gt;Estado de Métricas en Memoria:&lt;/b&gt; TPS, Transacciones Totales, Fraudes Detectados, $ Retenido" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#F1F5F9;strokeColor=#64748B;strokeWidth=1;fontColor=#334155;fontSize=9;align=center;" vertex="1">
+          <mxGeometry x="530" y="715" width="380" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="c_dashboard" parent="1" value="&lt;b&gt;📊 Tablero de Monitoreo Reactivo (Angular 21)&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;font-weight:normal;color:#1E3A8A;'&gt;Contenedor: &lt;code&gt;fraud-dashboard&lt;/code&gt; | Nginx Alpine Multi-stage | &lt;b&gt;Puerto: 4200:80&lt;/b&gt;&lt;/font&gt;" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;fillColor=#EFF6FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#1E40AF;fontSize=11;fontStyle=1;startSize=40;arcSize=6;shadow=1;" vertex="1">
+          <mxGeometry x="960" y="430" width="340" height="370" as="geometry"/>
+        </mxCell>
+        <mxCell id="dash_ws_service" parent="1" value="&lt;b&gt;⚡ WebSocket Service (Angular Signals)&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#1E3A8A;'&gt;Subscripción reactiva a stream &lt;code&gt;/ws&lt;/code&gt;&lt;br/&gt;Actualización instantánea sin recarga&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#DBEAFE;strokeColor=#3B82F6;strokeWidth=1.5;fontColor=#1E3A8A;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="975" y="490" width="310" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="dash_metrics_cards" parent="1" value="&lt;b&gt;📈 KPIs Financieros en Tiempo Real&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#1E3A8A;'&gt;• Medidor de TPS en Vivo&lt;br/&gt;• Total Operaciones Procesadas&lt;br/&gt;• Monto Retenido USD / Total Alertas&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#DBEAFE;strokeColor=#3B82F6;strokeWidth=1.5;fontColor=#1E3A8A;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="975" y="560" width="310" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="dash_alert_feed" parent="1" value="&lt;b&gt;🚨 Feed de Alertas &amp; Explicabilidad IA&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#1E3A8A;'&gt;• Badges de Severidad (CRITICAL, HIGH, MED)&lt;br/&gt;• Chip explicativo: &lt;b&gt;🤖 Qwen 2.5 1.5B (Ollama)&lt;/b&gt;&lt;br/&gt;• Modal de detalle con Score de riesgo&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#DBEAFE;strokeColor=#3B82F6;strokeWidth=1.5;fontColor=#1E3A8A;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="975" y="640" width="310" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="dash_tech_stack" parent="1" value="💻 &lt;i&gt;Angular 21 + TypeScript + Tailwind CSS / Vanilla CSS + Nginx&lt;/i&gt;" style="text;html=1;align=center;verticalAlign=middle;fontSize=9;fontColor=#1E40AF;" vertex="1">
+          <mxGeometry x="975" y="730" width="310" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_tx_in" parent="1" value="Transacciones JSON (Port 9094)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EA580C;strokeWidth=2;fontSize=10;fontColor=#7C2D12;labelBackgroundColor=#FFFFFF;" edge="1" source="ext_ecommerce" target="kafka_topic_tx">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_sim_in" parent="1" value="Simulación CLI" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EA580C;strokeWidth=1.5;dashed=1;fontSize=9;fontColor=#7C2D12;labelBackgroundColor=#FFFFFF;" edge="1" source="ext_simulator" target="kafka_topic_tx">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_k_to_consumer" parent="1" value="Consumo Stream Kafka" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EA580C;strokeWidth=2;fontSize=10;fontColor=#7C2D12;labelBackgroundColor=#FFFFFF;" edge="1" source="kafka_topic_tx" target="rust_consumer">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_cons_to_engine" parent="1" value="Deserializa &amp; Evalúa (&amp;lt; 2ms)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2;fontSize=10;fontColor=#064E3B;labelBackgroundColor=#FFFFFF;" edge="1" source="rust_consumer" target="rust_engine">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_engine_to_ollama_cli" parent="1" value="Zona Gris (&amp;gt;=$1500) o Enriquecimiento XAI" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#8B5CF6;strokeWidth=2;fontSize=9;fontColor=#4C1D95;labelBackgroundColor=#FFFFFF;" edge="1" source="rust_engine" target="rust_ollama_client">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_ollama_req" parent="1" value="HTTP POST /api/generate&lt;br/&gt;(JSON prompt &amp; schema)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9333EA;strokeWidth=2;fontSize=10;fontColor=#581C87;labelBackgroundColor=#FFFFFF;" edge="1" source="rust_ollama_client" target="ollama_model">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_ollama_to_prod" parent="1" value="Alerta enriquecida" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=1.5;fontSize=9;fontColor=#064E3B;labelBackgroundColor=#FFFFFF;" edge="1" source="rust_ollama_client" target="rust_producer">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_engine_to_prod" parent="1" value="Alerta Regla Dura" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#CA8A04;strokeWidth=1.5;fontSize=9;fontColor=#713F12;labelBackgroundColor=#FFFFFF;" edge="1" source="rust_engine" target="rust_producer">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_prod_to_k_alerts" parent="1" value="Publica en 'fraud-alerts'" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#DC2626;strokeWidth=2;fontSize=10;fontColor=#991B1B;labelBackgroundColor=#FFFFFF;" edge="1" source="rust_producer" target="kafka_topic_alerts">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_ws_stream" parent="1" value="WebSocket Broadcast: ws://.../ws&lt;br/&gt;(NewTransaction, FraudAlert, Metrics)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2.5;fontSize=10;fontColor=#1E40AF;labelBackgroundColor=#FFFFFF;" edge="1" source="rust_web_server" target="dash_ws_service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_k_to_kui" parent="1" value="bootstrap: kafka:9092" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6366F1;strokeWidth=1.5;dashed=1;fontSize=9;fontColor=#3730A3;labelBackgroundColor=#FFFFFF;" edge="1" source="c_kafka" target="c_kafka_ui">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_analyst_dash" parent="1" value="HTTP :4200 (Dashboard)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=1.5;dashed=1;fontSize=9;fontColor=#1E40AF;labelBackgroundColor=#FFFFFF;" edge="1" source="ext_analyst" target="c_dashboard">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_devops_access" parent="1" value="HTTP :8085 / :3000 (Swagger)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;dashed=1;fontSize=9;fontColor=#334155;labelBackgroundColor=#FFFFFF;" edge="1" source="ext_devops" target="rust_web_server">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="diag_proc_comb" name="Flujo de Procesos">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1360" pageHeight="1020" background="#F8FAFC" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="proc_banner" parent="1" value="&lt;b&gt;DIAGRAMA DE PROCESOS: DETECCIÓN Y EVALUACIÓN DE FRAUDE EN DOS CAPAS&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:12px;font-weight:normal;color:#94A3B8;'&gt;Flujo de Eventos: Ingesta Kafka KRaft ➔ Filtro Heurístico Ultrarrápido (&amp;lt;2ms) ➔ Análisis Cognitivo IA (Qwen 2.5) ➔ Alerta &amp; Dashboard&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#0F172A;strokeColor=#1E293B;fontColor=#F8FAFC;fontSize=15;align=center;verticalAlign=middle;shadow=1;" vertex="1">
+          <mxGeometry x="40" y="20" width="1280" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane_ingest" parent="1" value="&lt;b&gt;1. INGESTA &amp;amp; STREAMING&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;font-weight:normal;'&gt;Pasarelas de Pago &amp;amp; Apache Kafka KRaft&lt;/font&gt;" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;fillColor=#FFF7ED;strokeColor=#EA580C;strokeWidth=2;fontColor=#7C2D12;fontSize=11;fontStyle=1;startSize=40;arcSize=6;" vertex="1">
+          <mxGeometry x="40" y="95" width="280" height="880" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane_tier1" parent="1" value="&lt;b&gt;2. TIER 1: FAST-PATH HEURÍSTICO (&amp;lt; 2ms)&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;font-weight:normal;'&gt;Motor en Memoria (Rust Tokio + rdkafka)&lt;/font&gt;" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontColor=#064E3B;fontSize=11;fontStyle=1;startSize=40;arcSize=6;" vertex="1">
+          <mxGeometry x="330" y="95" width="340" height="880" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane_tier2" parent="1" value="&lt;b&gt;3. TIER 2: EVALUACIÓN COGNITIVA IA&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;font-weight:normal;'&gt;Ollama + Qwen 2.5 1.5B (Inferencia CPU Local)&lt;/font&gt;" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;fillColor=#FAF5FF;strokeColor=#9333EA;strokeWidth=2;fontColor=#581C87;fontSize=11;fontStyle=1;startSize=40;arcSize=6;" vertex="1">
+          <mxGeometry x="680" y="95" width="320" height="880" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane_notify" parent="1" value="&lt;b&gt;4. DIFUSIÓN &amp;amp; AUDITORÍA EN VIVO&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;font-weight:normal;'&gt;Kafka Topic &lt;code&gt;fraud-alerts&lt;/code&gt; &amp;amp; Dashboard Angular&lt;/font&gt;" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;dropTarget=0;fillColor=#EFF6FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#1E40AF;fontSize=11;fontStyle=1;startSize=40;arcSize=6;" vertex="1">
+          <mxGeometry x="1010" y="95" width="310" height="880" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_start" parent="1" value="&lt;b&gt;INICIO&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;'&gt;Cliente realiza compra en E-Commerce&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;strokeWidth=2;fontColor=#14532D;fontSize=11;align=center;" vertex="1">
+          <mxGeometry x="80" y="150" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_publish_kafka" parent="1" value="&lt;b&gt;Publicación a Kafka&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#7C2D12;'&gt;Evento JSON serializado al tópico:&lt;br/&gt;&lt;code&gt;transactions&lt;/code&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#FFEDD5;strokeColor=#EA580C;strokeWidth=1.5;fontColor=#7C2D12;fontSize=11;align=center;" vertex="1">
+          <mxGeometry x="80" y="240" width="200" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_kafka_broker" parent="1" value="&lt;b&gt;Broker Kafka KRaft&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#7C2D12;'&gt;Partición asignada &amp;amp; Offset persistido&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FED7AA;strokeColor=#C2410C;strokeWidth=1.5;fontColor=#7C2D12;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="115" y="340" width="130" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_rust_consume" parent="1" value="&lt;b&gt;Consumo Asíncrono de Stream&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#064E3B;'&gt;&lt;code&gt;StreamConsumer::recv().await&lt;/code&gt;&lt;br/&gt;Deserialización en &lt;code&gt;Transaction&lt;/code&gt; struct&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#D1FAE5;strokeColor=#059669;strokeWidth=1.5;fontColor=#064E3B;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="350" y="240" width="300" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_notify_new_tx" parent="1" value="&lt;b&gt;Notificación de Ingreso&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#1E3A8A;'&gt;Emite &lt;code&gt;DashboardEvent::NewTransaction&lt;/code&gt;&lt;br/&gt;Actualiza TPS y contador de transacciones&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#DBEAFE;strokeColor=#3B82F6;strokeWidth=1.5;fontColor=#1E3A8A;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="350" y="320" width="300" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_eval_rules" parent="1" value="&lt;b&gt;Evaluación Tier 1 en Memoria (&amp;lt; 2ms)&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:9.5px;color:#713F12;'&gt;&lt;b&gt;&lt;code&gt;FraudRuleEngine::evaluate(&amp;amp;tx)&lt;/code&gt;&lt;/b&gt;&lt;br/&gt;1. Monto &amp;gt;= $5,000 (Monto Excesivo)&lt;br/&gt;2. Historial de usuario &amp;gt; 3 ops en 30s (Velocidad)&lt;br/&gt;3. País en [NK, SY, IR, RU] (Geo Riesgo)&lt;br/&gt;4. Monto &amp;lt;= $1.00 (Prueba de Tarjeta)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#FEF08A;strokeColor=#CA8A04;strokeWidth=2;fontColor=#713F12;fontSize=10;align=center;shadow=1;" vertex="1">
+          <mxGeometry x="350" y="395" width="300" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="d_rule_triggered" parent="1" value="¿Se activó&lt;br/&gt;alguna regla?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FEF9C3;strokeColor=#CA8A04;strokeWidth=2;fontColor=#713F12;fontSize=11;fontStyle=1;align=center;" vertex="1">
+          <mxGeometry x="420" y="520" width="160" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_create_alert_obj" parent="1" value="&lt;b&gt;Genera Alerta Base&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:9.5px;color:#991B1B;'&gt;• Asigna UUID Alerta&lt;br/&gt;• Severidad: CRITICAL / HIGH / MED&lt;br/&gt;• Score inicial: 65 - 95&lt;br/&gt;• Despacha &lt;code&gt;tokio::spawn&lt;/code&gt; asíncrono&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#FEE2E2;strokeColor=#DC2626;strokeWidth=1.5;fontColor=#991B1B;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="350" y="640" width="300" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="d_gray_zone" parent="1" value="¿Transacción en&lt;br/&gt;Zona Gris?&lt;br/&gt;&lt;font style='font-size:9px;'&gt;(Monto &amp;gt;= $1500 &amp;amp; IA Activa)&lt;/font&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#9333EA;strokeWidth=1.5;fontColor=#581C87;fontSize=10;fontStyle=1;align=center;" vertex="1">
+          <mxGeometry x="420" y="745" width="160" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_tx_approved" parent="1" value="&lt;b&gt;✅ Transacción Aprobada&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#14532D;'&gt;Sin indicios de fraude.&lt;br/&gt;Tiempo de decisión: &amp;lt; 2ms&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#DCFCE7;strokeColor=#16A34A;strokeWidth=2;fontColor=#14532D;fontSize=11;align=center;" vertex="1">
+          <mxGeometry x="400" y="870" width="200" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_ai_enrich_req" parent="1" value="&lt;b&gt;Solicitud de Explicabilidad (XAI)&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#581C87;'&gt;&lt;code&gt;tokio::spawn&lt;/code&gt; envía prompt estructurado:&lt;br/&gt;Transacción + Regla Heurística disparada&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#F3E8FF;strokeColor=#9333EA;strokeWidth=1.5;fontColor=#581C87;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="700" y="630" width="280" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_ollama_inference" parent="1" value="&lt;b&gt;Inferencia en Ollama (CPU)&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#4C1D95;'&gt;&lt;b&gt;Modelo: &lt;code&gt;qwen2.5:1.5b&lt;/code&gt;&lt;/b&gt;&lt;br/&gt;Genera JSON estructurado:&lt;br/&gt;&lt;code&gt;{is_fraud, confidence, risk_level, explanation}&lt;/code&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#EDE9FE;strokeColor=#7C3AED;strokeWidth=2;fontColor=#4C1D95;fontSize=10;align=center;shadow=1;" vertex="1">
+          <mxGeometry x="700" y="715" width="280" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_ai_audit_req" parent="1" value="&lt;b&gt;Auditoría Cognitiva de Anomalías&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#581C87;'&gt;Evalúa coherencia de Merchant vs IP,&lt;br/&gt;país del emisor y monto moderado&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#F3E8FF;strokeColor=#9333EA;strokeWidth=1.5;fontColor=#581C87;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="700" y="810" width="280" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="d_ai_decision" parent="1" value="¿IA clasifica Fraude&lt;br/&gt;con Confianza &amp;gt;= 80%?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;strokeWidth=1.5;fontColor=#4C1D95;fontSize=10;fontStyle=1;align=center;" vertex="1">
+          <mxGeometry x="760" y="880" width="160" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_enrich_alert" parent="1" value="&lt;b&gt;Enriquecimiento de Alerta&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#991B1B;'&gt;• Se adjunta explicación: &lt;code&gt;[Qwen 2.5 IA]: ...&lt;/code&gt;&lt;br/&gt;• Si confianza &amp;gt; 85%, eleva score final&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#FEE2E2;strokeColor=#DC2626;strokeWidth=1.5;fontColor=#991B1B;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="1030" y="630" width="270" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_kafka_publish_alert" parent="1" value="&lt;b&gt;Publicación a Kafka&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#7C2D12;'&gt;Emite al topic: &lt;code&gt;fraud-alerts&lt;/code&gt;&lt;br/&gt;Para sistemas de bloqueo / auditoría externa&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#FFEDD5;strokeColor=#EA580C;strokeWidth=1.5;fontColor=#7C2D12;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="1030" y="715" width="270" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_ws_broadcast" parent="1" value="&lt;b&gt;WebSocket Broadcast al Dashboard&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:10px;color:#1E3A8A;'&gt;Emite &lt;code&gt;DashboardEvent::FraudAlertDetected&lt;/code&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#DBEAFE;strokeColor=#3B82F6;strokeWidth=1.5;fontColor=#1E3A8A;fontSize=10;align=center;" vertex="1">
+          <mxGeometry x="1030" y="795" width="270" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="p_dashboard_render" parent="1" value="&lt;b&gt;Visualización en Tablero Angular 21&lt;/b&gt;&lt;br/&gt;&lt;font style='font-size:9.5px;color:#1E3A8A;'&gt;• Tarjeta animada en feed de alertas&lt;br/&gt;• Badge de severidad (CRITICAL / HIGH)&lt;br/&gt;• Recuadro con chip 🤖 &lt;b&gt;Qwen 2.5 1.5B (Ollama)&lt;/b&gt;&lt;br/&gt;• Incremento reactivo de $ Retenido acumulado&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#EFF6FF;strokeColor=#1D4ED8;strokeWidth=2;fontColor=#1E3A8A;fontSize=10;align=center;shadow=1;" vertex="1">
+          <mxGeometry x="1030" y="865" width="270" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_1" parent="1" value="POST Tx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#EA580C;strokeWidth=2;" edge="1" source="p_start" target="p_publish_kafka">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_2" parent="1" value="Stream" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#EA580C;strokeWidth=2;" edge="1" source="p_publish_kafka" target="p_kafka_broker">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_3" parent="1" value="rdkafka recv()" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#EA580C;strokeWidth=2;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" source="p_kafka_broker" target="p_rust_consume">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_4" parent="1" value="Evento" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;" edge="1" source="p_rust_consume" target="p_notify_new_tx">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_5" parent="1" value="Inicia Reglas" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#059669;strokeWidth=2;" edge="1" source="p_notify_new_tx" target="p_eval_rules">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_6" parent="1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#CA8A04;strokeWidth=2;" edge="1" source="p_eval_rules" target="d_rule_triggered">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_7_yes" parent="1" value="&lt;b&gt;SÍ (Fraude Detectado)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DC2626;strokeWidth=2.5;fontColor=#DC2626;fontSize=10;labelBackgroundColor=#FFFFFF;" edge="1" source="d_rule_triggered" target="p_create_alert_obj">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_7_no" parent="1" value="&lt;b&gt;NO (Pasa reglas)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#64748B;strokeWidth=2;fontColor=#475569;fontSize=10;labelBackgroundColor=#FFFFFF;" edge="1" source="d_rule_triggered" target="d_gray_zone">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_8" parent="1" value="tokio::spawn" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#9333EA;strokeWidth=2;fontColor=#581C87;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" source="p_create_alert_obj" target="p_ai_enrich_req">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_9" parent="1" value="HTTP POST" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;" edge="1" source="p_ai_enrich_req" target="p_ollama_inference">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_10" parent="1" value="JSON XAI" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#9333EA;strokeWidth=2;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" source="p_ollama_inference" target="p_enrich_alert">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_11" parent="1" value="Alerta Completa" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#EA580C;strokeWidth=2;" edge="1" source="p_enrich_alert" target="p_kafka_publish_alert">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_12" parent="1" value="rdkafka OK" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2563EB;strokeWidth=2;" edge="1" source="p_kafka_publish_alert" target="p_ws_broadcast">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_13" parent="1" value="WebSocket Push" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2563EB;strokeWidth=2.5;fontColor=#1E40AF;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" source="p_ws_broadcast" target="p_dashboard_render">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_14_gray_yes" parent="1" value="&lt;b&gt;SÍ (Auditar)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#9333EA;strokeWidth=2;fontColor=#581C87;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" source="d_gray_zone" target="p_ai_audit_req">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_14_gray_no" parent="1" value="&lt;b&gt;NO (&amp;lt; $1500)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16A34A;strokeWidth=2;fontColor=#16A34A;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" source="d_gray_zone" target="p_tx_approved">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_15" parent="1" value="Ollama Inferencia" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7C3AED;strokeWidth=2;" edge="1" source="p_ai_audit_req" target="d_ai_decision">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_16_ai_yes" parent="1" value="&lt;b&gt;SÍ (Fraude Cognitivo)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DC2626;strokeWidth=2;fontColor=#DC2626;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" source="d_ai_decision" target="p_enrich_alert">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="pe_16_ai_no" parent="1" value="&lt;b&gt;NO (Legítimo)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16A34A;strokeWidth=2;fontColor=#16A34A;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" source="d_ai_decision" target="p_tx_approved">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,122 @@
+services:
+  # ==========================================
+  # 1. Apache Kafka en modo KRaft (Sin ZooKeeper)
+  # ==========================================
+  kafka:
+    image: apache/kafka:3.8.0
+    container_name: fraud-kafka-kraft
+    ports:
+      - "9092:9092"
+      - "9094:9094"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9094
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,PLAINTEXT_HOST://0.0.0.0:9094
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      CLUSTER_ID: "4L622nShTUiTWhNBCtKVdA"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - fraud-network
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # ==========================================
+  # 2. Kafka UI Dashboard (Explorador de Tópicos)
+  # ==========================================
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: fraud-kafka-ui
+    ports:
+      - "8085:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local-kraft-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - fraud-network
+
+  # ==========================================
+  # 3. Core API (Rust + Axum + rdkafka)
+  # ==========================================
+  core-api:
+    build:
+      context: ./src/core-api
+      dockerfile: Dockerfile
+    container_name: fraud-core-api
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      SERVER_HOST: "0.0.0.0"
+      KAFKA_BROKERS: "kafka:9092"
+      TRANSACTIONS_TOPIC: "transactions"
+      FRAUD_ALERTS_TOPIC: "fraud-alerts"
+      KAFKA_GROUP_ID: "fraud-detection-core"
+      MAX_AMOUNT_THRESHOLD: "5000"
+      OLLAMA_URL: "http://ollama:11434"
+      OLLAMA_MODEL: "qwen2.5:1.5b"
+      OLLAMA_ENABLED: "true"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    networks:
+      - fraud-network
+
+  # ==========================================
+  # 4. Frontend Dashboard (Angular 21 + Nginx)
+  # ==========================================
+  dashboard:
+    build:
+      context: ./src/dashboard
+      dockerfile: Dockerfile
+    container_name: fraud-dashboard
+    ports:
+      - "4200:80"
+    depends_on:
+      - core-api
+    networks:
+      - fraud-network
+
+  # ==========================================
+  # 5. Local AI Engine (Ollama - Qwen 2.5 1.5B)
+  # ==========================================
+  ollama:
+    image: ollama/ollama:latest
+    container_name: fraud-ollama
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - fraud-network
+
+networks:
+  fraud-network:
+    driver: bridge
+
+volumes:
+  kafka_data:
+    driver: local
+  ollama_data:
+    driver: local
+
